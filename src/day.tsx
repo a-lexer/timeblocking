@@ -1,0 +1,7 @@
+function day() {
+
+}
+
+export {
+    day
+}
