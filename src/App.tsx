@@ -44,7 +44,9 @@ function ListContainer() {
       <h1>Timeblocking</h1>
       <p>
         See{" "}
-        <a href="https://www.calnewport.com/blog/2013/12/21/deep-habits-the-importance-of-planning-every-minute-of-your-work-day/">here</a>{" "}
+        <a href="https://www.calnewport.com/blog/2013/12/21/deep-habits-the-importance-of-planning-every-minute-of-your-work-day/">
+          here
+        </a>{" "}
         for an explanation of Timeblocking.
       </p>
       {listItems}
@@ -74,14 +76,8 @@ function HoursBoard() {
     setObjects([
       ...objects,
       {
-        position: "absolute",
         top: `${initialClientDown}px`,
-        color: "red",
-        width: "800px",
         height: `${currentClientMousePosition - initialClientDown}px`,
-        backgroundColor: "rgba(255,0,0,0.4)",
-        marginLeft: "65px",
-        borderLeft: "2px green solid",
       },
     ]);
     // actually create an object
@@ -93,6 +89,7 @@ function HoursBoard() {
       setCurrentClientMousePosition(e.clientY);
     }
   }
+
   /**
    * Working hours of the day.
    */
@@ -115,21 +112,35 @@ function HoursBoard() {
     setIsCreating(false);
   }
 
+  function handleObjectDrag(i, e) {
+    let index: number = arguments[0];
+
+    // fun trivia: cannot drag on to another item, although in this case we *can* do that
+    // since we are simply doing arbitrary positioning
+    if (e.clientY === 0) {
+      return;
+    }
+
+    let local_objects = [...objects];
+    let obj = {
+      ...local_objects[index],
+      top: `${e.clientY}px`,
+    };
+    local_objects[index] = obj;
+    setObjects(local_objects);
+  }
+
   return (
     <div>
       {(() => {
         if (isCreating) {
           return (
             <div
+              className="object"
+              onMouseUp={handleMouseUp}
               style={{
-                position: "absolute",
                 top: `${initialClientDown}px`,
-                color: "red",
-                width: "800px",
                 height: `${currentClientMousePosition - initialClientDown}px`,
-                backgroundColor: "rgba(255,0,0,0.4)",
-                marginLeft: "65px",
-                borderLeft: "2px red dashed",
               }}
             >
               CREATING{" "}
@@ -138,9 +149,15 @@ function HoursBoard() {
         }
       })()}
       {verticalView}
-      {objects.map((v) => {
+      {objects.map((v, index) => {
         return (
-          <div onMouseEnter={handleMouseEnterExistingObject} style={v}></div>
+          <div
+            draggable
+            className="object"
+            onDrag={handleObjectDrag.bind(null, index)}
+            onMouseEnter={handleMouseEnterExistingObject}
+            style={v}
+          ></div>
         );
       })}
     </div>

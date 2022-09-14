@@ -62,3 +62,17 @@
   width: 100%;
   margin-left: 20px;
 }
+
+
+.object {
+  position: absolute;
+  color: red;
+  width: 800px;
+  background-color: rgba(255,0,0,0.4);
+  margin-left: 65px;
+  border-left: 2px green solid;
+  border-bottom: 1px dashed purple;
+  min-height: 20px;
+  cursor:pointer;
+  z-index: 100;
+}
