@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 
 function App() {
+  const colours = ["red", "green", "blue"];
+
   return (
     <div className="App">
       <ListContainer></ListContainer>
@@ -38,7 +40,13 @@ function ListContainer() {
 
   return (
     <div className="list-container">
-      <button onClick={handleClick}>Add item from ListContainer</button>
+      {/* <button onClick={handleClick}>Add item from ListContainer</button> */}
+      <h1>Timeblocking</h1>
+      <p>
+        See{" "}
+        <a href="https://www.calnewport.com/blog/2013/12/21/deep-habits-the-importance-of-planning-every-minute-of-your-work-day/">here</a>{" "}
+        for an explanation of Timeblocking.
+      </p>
       {listItems}
       <HoursBoard />
     </div>
@@ -46,6 +54,8 @@ function ListContainer() {
 }
 
 function HoursBoard() {
+  const [totalTimeTaken, setTotalTimeTaken] = useState(0);
+
   const [isCreating, setIsCreating] = useState(false);
   const [initialClientDown, setInitialClientDown] = useState(0);
   const [initialClientUp, setInitialClientUp] = useState(0);
@@ -56,6 +66,7 @@ function HoursBoard() {
   function handleMouseDown(e) {
     setIsCreating(true);
     setInitialClientDown(e.clientY);
+    setInitialClientUp(e.clientY);
   }
   function handleMouseUp(e) {
     setIsCreating(false);
@@ -69,10 +80,12 @@ function HoursBoard() {
         width: "800px",
         height: `${currentClientMousePosition - initialClientDown}px`,
         backgroundColor: "rgba(255,0,0,0.4)",
-        marginLeft: "45px",
+        marginLeft: "65px",
+        borderLeft: "2px green solid",
       },
     ]);
     // actually create an object
+    setInitialClientDown(0);
   }
 
   function handleMouseMove(e) {
@@ -98,6 +111,10 @@ function HoursBoard() {
     );
   });
 
+  function handleMouseEnterExistingObject() {
+    setIsCreating(false);
+  }
+
   return (
     <div>
       {(() => {
@@ -111,7 +128,8 @@ function HoursBoard() {
                 width: "800px",
                 height: `${currentClientMousePosition - initialClientDown}px`,
                 backgroundColor: "rgba(255,0,0,0.4)",
-                marginLeft: "45px",
+                marginLeft: "65px",
+                borderLeft: "2px red dashed",
               }}
             >
               CREATING{" "}
@@ -121,7 +139,9 @@ function HoursBoard() {
       })()}
       {verticalView}
       {objects.map((v) => {
-        return <div style={v}></div>;
+        return (
+          <div onMouseEnter={handleMouseEnterExistingObject} style={v}></div>
+        );
       })}
     </div>
   );

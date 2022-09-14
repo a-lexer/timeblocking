@@ -44,6 +44,8 @@
 }
 
 .planner-day-row-container {
+  user-select: none;
+
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -52,10 +54,11 @@
 .planner-day-row-container .left-number {
   font-size: 2rem;
   margin-top: calc(100vh / 20);
+  margin-right: 20px;
 }
 
 .planner-day-row-container .planner-day-row {
-  border-bottom: 2px solid rgb(152, 148, 148);
+  border-bottom: 2px dashed rgba(152, 148, 148, 0.2);
   width: 100%;
   margin-left: 20px;
 }
