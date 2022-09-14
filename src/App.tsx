@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 /**
@@ -8,7 +8,7 @@ document.addEventListener(
   "dragstart",
   function (event) {
     event.dataTransfer.setDragImage(
-      event.target,
+      new Image(0, 0),
       window.outerWidth,
       window.outerHeight
     );
@@ -91,13 +91,16 @@ function ListContainer() {
 
 function HoursBoard() {
   const [totalTimeTaken, setTotalTimeTaken] = useState(0);
-
   const [isCreating, setIsCreating] = useState(false);
   const [initialClientDown, setInitialClientDown] = useState(0);
   const [initialClientUp, setInitialClientUp] = useState(0);
   const [currentClientMousePosition, setCurrentClientMousePosition] =
     useState(0);
   const [objects, setObjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log("todo make this useful");
+  }, [isCreating]);
 
   function handleMouseDown(e) {
     setIsCreating(true);
@@ -146,6 +149,10 @@ function HoursBoard() {
     setIsCreating(false);
   }
 
+  function handleTextInputObject(e) {
+    console.log(e.target.value);
+  }
+
   function handleObjectColourUpdate(index, colour, e) {
     console.log(arguments);
     let local_objects = [...objects];
@@ -157,14 +164,16 @@ function HoursBoard() {
     setObjects(local_objects);
   }
 
-  function handleObjectDrag(i, e) {
-    let index: number = arguments[0];
-
+  function handleObjectDrag(index, e) {
     // fun trivia: cannot drag on to another item, although in this case we *can* do that
     // since we are simply doing arbitrary positioning
     if (e.clientY === 0) {
       return;
     }
+
+    // todo: fix the positioning on a drag
+    let rect = e.target.getBoundingClientRect();
+    console.log("rect is ", rect);
 
     let local_objects = [...objects];
     let obj = {
@@ -204,13 +213,12 @@ function HoursBoard() {
             style={v}
           >
             <div className="input-container">
-              <textarea></textarea>
+              <textarea onInput={handleTextInputObject}></textarea>
               <ColourSelectPanel
-              id={index}
-              onClickFn={handleObjectColourUpdate.bind(null, index)}
-            ></ColourSelectPanel>
+                id={index}
+                onClickFn={handleObjectColourUpdate.bind(null, index)}
+              ></ColourSelectPanel>
             </div>
-
           </div>
         );
       })}
