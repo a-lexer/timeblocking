@@ -1,6 +1,40 @@
 import React, { useState } from "react";
 import "./App.css";
 
+/**
+ * Code credit: https://stackoverflow.com/questions/66099800/how-to-hide-shadow-of-draggable-div-while-dragging
+ */
+document.addEventListener(
+  "dragstart",
+  function (event) {
+    event.dataTransfer.setDragImage(
+      event.target,
+      window.outerWidth,
+      window.outerHeight
+    );
+  },
+  false
+);
+
+function ColourSelectPanel({ id, onClickFn }) {
+  return (
+    <div className="color-select-panel">
+      <div
+        onClick={onClickFn.bind(null, "rgba(0, 0, 255, 0.4)")}
+        className="color-selection-square-blue"
+      ></div>
+      <div
+        onClick={onClickFn.bind(null, "rgba(255, 0, 0, 0.4)")}
+        className="color-selection-square-red"
+      ></div>
+      <div
+        onClick={onClickFn.bind(null, "rgba(0, 255, 0, 0.4)")}
+        className="color-selection-square-green"
+      ></div>
+    </div>
+  );
+}
+
 function App() {
   const colours = ["red", "green", "blue"];
 
@@ -112,6 +146,17 @@ function HoursBoard() {
     setIsCreating(false);
   }
 
+  function handleObjectColourUpdate(index, colour, e) {
+    console.log(arguments);
+    let local_objects = [...objects];
+    let obj = {
+      ...local_objects[index],
+      backgroundColor: colour,
+    };
+    local_objects[index] = obj;
+    setObjects(local_objects);
+  }
+
   function handleObjectDrag(i, e) {
     let index: number = arguments[0];
 
@@ -157,7 +202,16 @@ function HoursBoard() {
             onDrag={handleObjectDrag.bind(null, index)}
             onMouseEnter={handleMouseEnterExistingObject}
             style={v}
-          ></div>
+          >
+            <div className="input-container">
+              <textarea></textarea>
+              <ColourSelectPanel
+              id={index}
+              onClickFn={handleObjectColourUpdate.bind(null, index)}
+            ></ColourSelectPanel>
+            </div>
+
+          </div>
         );
       })}
     </div>
