@@ -1,3 +1,8 @@
+# Timeblocking
+
+A neat concept. This is a little app that I use personally to timeblock my day.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
